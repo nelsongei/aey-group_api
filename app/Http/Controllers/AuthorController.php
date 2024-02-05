@@ -35,5 +35,29 @@ class AuthorController extends Controller
         }
         return response()->json(['status'=>'success','message'=>'Author Created Successfully']);
     }
+    public function view($id)
+    {
+        $author = Author::findOrFail($id);
+        return response()->json(['author'=>$author]);
+    }
+    public function update(AuthorRequest $request,$id)
+    {
+        try {
+            DB::beginTransaction();
+            $author = Author::findOrFail($id);
+            $author->name = $request->name;
+            $author->age = $request->age;
+            $author->gender = $request->gender;
+            $author->country = $request->country;
+            $author->genre = $request->genre;
+            $author->push();
+            DB::rollBack();
+        }
+        catch (\Exception $e)
+        {
+            DB::rollBack();
+            return response()->json(['error'=>$e->getMessage()]);
+        }
+    }
 
 }

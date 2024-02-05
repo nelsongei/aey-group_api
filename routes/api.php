@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\OtpController;
 use App\Http\Controllers\Api\RegistrationController;
+use App\Http\Controllers\AuthorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,4 +24,17 @@ Route::post('/login',[RegistrationController::class,'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout',[RegistrationController::class,'logout']);
+
+    /*
+     * Author Endpoints
+     * */
+    Route::group(['prefix'=>'authors'],function (){
+        Route::get('/',[AuthorController::class,'index']);
+        Route::post('/author',[AuthorController::class,'store']);
+        Route::get('author/{id}',[AuthorController::class,'view']);
+        Route::put('author/{id}',[AuthorController::class,'update']);
+    });
+    /*
+     * Book EndPoints
+     * */
 });
